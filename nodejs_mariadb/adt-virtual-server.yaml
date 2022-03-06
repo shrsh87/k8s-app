@@ -1,0 +1,28 @@
+apiVersion: k8s.nginx.org/v1
+kind: VirtualServer
+metadata:
+  name: adt
+spec:
+  host: adt.example.com
+  tls:
+    secret: adt-secret
+  upstreams:
+  - name: index
+    service: users-svc
+    port: 80
+  - name: health
+    service: users-svc
+    port: 80
+  - name: users
+    service: users-svc
+    port: 80
+  routes:
+  - path: /
+    action:
+      pass: users
+  - path: /health
+    action:
+      pass: users
+  - path: /users
+    action:
+      pass: users
